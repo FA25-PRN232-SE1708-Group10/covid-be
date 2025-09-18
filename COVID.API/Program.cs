@@ -68,6 +68,17 @@ namespace COVID.API
 
             app.UseCors("AllowAll");
 
+            app.Use(
+                async (context, next) =>
+                {
+                    if (context.Request.Path.StartsWithSegments("/odata/CovidData"))
+                    {
+                        context.Response.Headers.CacheControl = "public, max-age=86400";
+                    }
+                    await next();
+                }
+            );
+
             app.UseAuthorization();
 
             app.MapControllers();
