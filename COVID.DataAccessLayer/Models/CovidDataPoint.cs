@@ -1,4 +1,4 @@
-﻿namespace COVID.API.Models
+namespace COVID.DataAccessLayer.Models
 {
     public class CovidDataPoint
     {

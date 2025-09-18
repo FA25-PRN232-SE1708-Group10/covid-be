@@ -1,7 +1,5 @@
-﻿using COVID.API.Data;
-using COVID.API.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using COVID.BusinessLogicLayer.Services;
+using COVID.DataAccessLayer.Models;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
@@ -9,17 +7,17 @@ namespace COVID.API.Controllers
 {
     public class CovidDataController : ODataController
     {
-        private readonly CovidDbContext _context;
+        private readonly ICovidDataService _service;
 
-        public CovidDataController(CovidDbContext context)
+        public CovidDataController(ICovidDataService service)
         {
-            _context = context;
+            _service = service;
         }
 
         [EnableQuery(PageSize = 1000)]
         public IQueryable<CovidDataPoint> Get()
         {
-            return _context.CovidDataPoints;
+            return _service.GetAllData();
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Globalization;
-using COVID.API.Models;
+using System.Globalization;
+using COVID.DataAccessLayer.Models;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace COVID.API.Data
+namespace COVID.DataAccessLayer.Data
 {
     public static class DataSeeder
     {
@@ -18,29 +19,16 @@ namespace COVID.API.Data
             if (context.CovidDataPoints.Any())
             {
                 Console.WriteLine("Database already seeded.");
-                return; // DB has been seeded
+                return;
             }
 
             Console.WriteLine("Seeding database from CSV files...");
 
-            // NOTE: Place the provided CSV files in a 'CsvData' folder in your project's root directory.
-            // Ensure these files are copied to the output directory by setting 'Copy to Output Directory' to 'Copy if newer' in file properties.
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            var confirmedPath = Path.Combine(
-                basePath,
-                "CsvData",
-                "time_series_covid19_confirmed_global.csv"
-            );
-            var deathsPath = Path.Combine(
-                basePath,
-                "CsvData",
-                "time_series_covid19_deaths_global.csv"
-            );
-            var recoveredPath = Path.Combine(
-                basePath,
-                "CsvData",
-                "time_series_covid19_recovered_global.csv"
-            );
+            var csvDir = Path.Combine(basePath, "CsvData");
+            var confirmedPath = Path.Combine(csvDir, "time_series_covid19_confirmed_global.csv");
+            var deathsPath = Path.Combine(csvDir, "time_series_covid19_deaths_global.csv");
+            var recoveredPath = Path.Combine(csvDir, "time_series_covid19_recovered_global.csv");
 
             if (
                 !File.Exists(confirmedPath)
@@ -90,12 +78,9 @@ namespace COVID.API.Data
                 var province = csv.GetField("Province/State");
                 var country = csv.GetField("Country/Region");
 
-                // --- FIX STARTS HERE ---
-                // Instead of directly converting, read as string first to handle empty values.
                 var latString = csv.GetField("Lat");
                 var lonString = csv.GetField("Long");
 
-                // TryParse will attempt the conversion. If it fails, the value remains 0.
                 double.TryParse(
                     latString,
                     NumberStyles.Any,
@@ -108,7 +93,6 @@ namespace COVID.API.Data
                     CultureInfo.InvariantCulture,
                     out double lon
                 );
-                // --- FIX ENDS HERE ---
 
                 foreach (var dateHeader in dateHeaders)
                 {
@@ -123,8 +107,8 @@ namespace COVID.API.Data
                             {
                                 ProvinceState = province,
                                 CountryRegion = country,
-                                Lat = lat, // Use the safely parsed latitude
-                                Long = lon, // Use the safely parsed longitude
+                                Lat = lat,
+                                Long = lon,
                                 Date = date,
                             };
                             dataPoints[key] = dataPoint;

@@ -1,5 +1,7 @@
-using COVID.API.Data;
-using COVID.API.Models;
+using COVID.BusinessLogicLayer.Services;
+using COVID.DataAccessLayer;
+using COVID.DataAccessLayer.Data;
+using COVID.DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
@@ -18,6 +20,9 @@ namespace COVID.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            builder.Services.AddScoped<ICovidDataRepository, CovidDataRepository>();
+            builder.Services.AddScoped<ICovidDataService, CovidDataService>();
+
             builder
                 .Services.AddControllers()
                 .AddOData(opt =>
@@ -33,7 +38,7 @@ namespace COVID.API
             static IEdmModel GetEdmModel()
             {
                 var builder = new ODataConventionModelBuilder();
-                builder.EntitySet<CovidDataPoint>("CovidData");
+                builder.EntitySet<COVID.DataAccessLayer.Models.CovidDataPoint>("CovidData");
                 return builder.GetEdmModel();
             }
 

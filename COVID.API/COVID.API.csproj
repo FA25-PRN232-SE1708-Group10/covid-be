@@ -25,4 +25,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\COVID.BusinessLogicLayer\COVID.BusinessLogicLayer.csproj" />
+    <ProjectReference Include="..\COVID.DataAccessLayer\COVID.DataAccessLayer.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace COVID.API.Migrations
+namespace COVID.DataAccessLayer.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class _1Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +14,8 @@ namespace COVID.API.Migrations
                 name: "CovidDataPoints",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table
+                        .Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProvinceState = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -24,19 +24,19 @@ namespace COVID.API.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Confirmed = table.Column<int>(type: "int", nullable: false),
                     Deaths = table.Column<int>(type: "int", nullable: false),
-                    Recovered = table.Column<int>(type: "int", nullable: true)
+                    Recovered = table.Column<int>(type: "int", nullable: true),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CovidDataPoints", x => x.Id);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "CovidDataPoints");
+            migrationBuilder.DropTable(name: "CovidDataPoints");
         }
     }
 }

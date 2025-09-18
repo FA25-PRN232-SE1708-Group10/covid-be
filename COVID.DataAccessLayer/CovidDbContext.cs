@@ -1,7 +1,7 @@
-﻿using COVID.API.Models;
+using COVID.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace COVID.API.Data
+namespace COVID.DataAccessLayer
 {
     public class CovidDbContext : DbContext
     {
