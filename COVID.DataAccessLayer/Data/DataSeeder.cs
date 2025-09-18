@@ -96,7 +96,7 @@ namespace COVID.DataAccessLayer.Data
 
                 foreach (var dateHeader in dateHeaders)
                 {
-                    if (DateTime.TryParse(dateHeader, CultureInfo.InvariantCulture, out var date))
+                    if (DateOnly.TryParse(dateHeader, CultureInfo.InvariantCulture, out var date))
                     {
                         var value = csv.GetField<int>(dateHeader);
                         var key = $"{country}-{province}-{date:yyyy-MM-dd}";
